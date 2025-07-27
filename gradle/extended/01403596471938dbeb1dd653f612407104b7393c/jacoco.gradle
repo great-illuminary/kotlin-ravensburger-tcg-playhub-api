@@ -1,0 +1,82 @@
+apply plugin: 'jacoco'
+
+def connectedDevices = (rootProject.properties['CONNECTED_DEVICES'] ?: "0").trim() as Integer
+
+def unitTestsTasks = project.ext.has("optionalUnitTestTasks") ? project.ext.optionalUnitTestTasks : [ "testDebugUnitTest" ]
+def androidTestsTasks = project.ext.has("optionalAndroidTestTasks") ? project.ext.optionalAndroidTestTasks : [ "createDebugCoverageReport" ]
+
+def dependsOn = connectedDevices > 0 ? unitTestsTasks + androidTestsTasks : unitTestsTasks
+
+// Add support for kotlin multiplatform's check task
+if (project.tasks.findByName("check")) {
+    dependsOn += "check"
+}
+
+task jacocoModuleReport(type: JacocoReport, dependsOn: dependsOn) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports"
+
+    tasks.withType(VerificationTask.class).configureEach {
+        if (it.name.matches(/connected.+AndroidTest/) || it.name.matches(/test.*UnitTest/)) {
+            it.ignoreFailures = true
+        }
+    }
+
+    reports {
+        csv.required = false
+        xml.required = true
+        html.required = true
+    }
+
+    def jacocoExcludes = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            'android/**/*.*',
+            '**/org/webrtc/**/*.*',
+            '**/Lambda$*.class',
+            '**/Lambda.class',
+            '**/*Lambda.class',
+            '**/*Lambda*.class',
+            '**/*Lambda*.*',
+            '**/*Builder.*',
+            '**/*_MembersInjector.class',
+            '**/*_MembersInjector*.*',
+            '**/Dagger*Component*.class',
+            '**/Dagger*Subcomponent*.class',
+            '**/*Subcomponent$Builder.class',
+            '**/*Module_*Factory.class',
+            '**/*_*Factory*.*',
+            '**/*Component*.*',
+            '**/*Module*.*',
+            'dagger/**',
+            'hilt_aggregated_deps/**'
+    ]
+
+    def extraExcludes = project.ext.has("jacocoExtraExcludes") ? project.ext.jacocoExtraExcludes : [ ]
+    jacocoExcludes.addAll(extraExcludes)
+
+    final javaSrc = "${project.projectDir}/src/main/java"
+    final kotlinSrc = "${project.projectDir}/src/main/kotlin"
+    final multiplatformSrc = "${project.projectDir}/src/commonMain/kotlin"
+    // check for future sourceSets in the future
+
+    final androidModuleKotlinFileTree = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: jacocoExcludes)
+    final androidModuleJavacFileTree = fileTree(dir: "${project.buildDir}/intermediates/javac/debug", excludes: jacocoExcludes)
+    final javaModuleKotlinFileTree = fileTree(dir: "${project.buildDir}/classes/kotlin/main", excludes: jacocoExcludes)
+    final javaModuleJavacFileTree = fileTree(dir: "${project.buildDir}/classes/java/main", excludes: jacocoExcludes)
+
+    sourceDirectories.setFrom files([javaSrc, kotlinSrc, multiplatformSrc])
+    classDirectories.setFrom files([
+            androidModuleKotlinFileTree,
+            androidModuleJavacFileTree,
+            javaModuleKotlinFileTree,
+            javaModuleJavacFileTree
+    ])
+
+    executionData.setFrom files(fileTree(dir: project.buildDir, includes: [
+            "**/*.exec",
+            "**/*.ec"
+    ]))
+}

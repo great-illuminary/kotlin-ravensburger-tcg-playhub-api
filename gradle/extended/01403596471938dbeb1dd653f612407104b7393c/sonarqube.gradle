@@ -1,0 +1,29 @@
+apply plugin: "org.sonarqube"
+
+def unitTestsTasks = project.ext.has("optionalUnitTestTasks") ? project.ext.optionalUnitTestTasks : [ "testDebugUnitTest" ]
+def paths = unitTestsTasks.collect { "build/test-results/${it}" }
+
+def sonarqubePrefix = project.ext.has("sonarqubePrefix") ? project.ext.sonarqubePrefix : "android_sdk_"
+
+def projectName = "${sonarqubePrefix}${project.name}"
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName", projectName
+        property "sonar.projectKey", projectName
+        property "sonar.junit.reportPaths", paths.join(",")
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property "sonar.kotlin.detekt.reportPaths", "build/reports/detekt-report.xml"
+        property "sonar.kotlin.ktlint.reportPaths", "build/reports/ktlint-report.xml"
+        // disable c/cpp/obj-c
+        property "sonar.c.file.suffixes", "-"
+        property "sonar.cpp.file.suffixes", "-"
+        property "sonar.objc.file.suffixes", "-"
+
+        // kotlin folder is not compatible out of the box, making sure this is the case here
+        if (file("src/main/kotlin").exists()) {
+            properties ["sonar.sources"] += "src/main/kotlin"
+        }
+
+    }
+}
