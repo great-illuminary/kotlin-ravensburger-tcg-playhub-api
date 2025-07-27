@@ -35,17 +35,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.kotlinx.coroutines)
+                api(additionals.kotlinx.coroutines)
                 api(additionals.kotlinx.serialization.json)
-                api(libs.kotlinx.datetime)
-                implementation(libs.http.client)
+                api(additionals.kotlinx.datetime)
+                implementation(additionals.multiplatform.http.client)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 api(kotlin("test"))
-                api(libs.kotlinx.coroutines.test)
+                api(additionals.kotlinx.coroutines.test)
             }
         }
     }

@@ -4,5 +4,6 @@ build/
 .gradle/
 .idea/
 .kotlin/
+gradle/extended
 
 local.properties

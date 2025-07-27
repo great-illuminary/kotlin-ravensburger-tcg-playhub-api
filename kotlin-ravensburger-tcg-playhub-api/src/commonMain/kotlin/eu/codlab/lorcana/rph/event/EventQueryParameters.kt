@@ -1,7 +1,7 @@
 package eu.codlab.lorcana.rph.event
 
+import io.ktor.http.encodeURLParameter
 import kotlinx.serialization.SerialName
-import java.net.URLEncoder
 
 data class EventQueryParameters(
     val startDateAfter: String? = null,
@@ -15,5 +15,5 @@ data class EventQueryParameters(
         "page" to "$page",
         "game_slug" to "disney-lorcana"
     ).filter { null != it.second }
-        .joinToString("&") { "${it.first}=${URLEncoder.encode(it.second, "UTF-8")}" }
+        .joinToString("&") { "${it.first}=${it.second!!.encodeURLParameter()}" }
 }

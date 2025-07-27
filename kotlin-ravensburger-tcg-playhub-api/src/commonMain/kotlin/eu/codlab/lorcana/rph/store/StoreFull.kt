@@ -59,9 +59,7 @@ data class StoreFull(
      */
     @SerialName("store_types_pretty")
     val storeTypesPretty: List<String>? = null,
-) {
-    fun id() = id
-}
+)
 
 @Serializable
 data class LatLng(

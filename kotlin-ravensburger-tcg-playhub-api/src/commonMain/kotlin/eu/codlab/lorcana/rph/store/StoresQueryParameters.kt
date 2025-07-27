@@ -1,7 +1,7 @@
 package eu.codlab.lorcana.rph.store
 
+import io.ktor.http.encodeURLParameter
 import kotlinx.serialization.SerialName
-import java.net.URLEncoder
 
 data class StoresQueryParameters(
     val latitude: Double? = null,
@@ -22,5 +22,5 @@ data class StoresQueryParameters(
         "miles" to miles?.toString(),
         "game_id" to "$gameId",
     ).filter { it.second != null }
-        .joinToString("&") { "${it.first}=${URLEncoder.encode(it.second, "UTF-8")}" }
+        .joinToString("&") { "${it.first}=${it.second!!.encodeURLParameter()}" }
 }
