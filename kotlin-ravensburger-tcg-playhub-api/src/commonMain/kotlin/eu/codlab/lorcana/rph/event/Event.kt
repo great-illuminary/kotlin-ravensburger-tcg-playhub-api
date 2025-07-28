@@ -3,9 +3,10 @@ package eu.codlab.lorcana.rph.event
 import eu.codlab.lorcana.rph.gameplay.GameplayFormat
 import eu.codlab.lorcana.rph.store.StoreFull
 import eu.codlab.lorcana.rph.utils.Coordinates
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * For instance desribed via
@@ -124,9 +125,11 @@ data class Event(
     @SerialName("phase_template_group")
     val phaseTemplateGroupId: String
 ) {
-    val startDateTime: LocalDateTime?
-        get() = startDatetimeISO?.let { LocalDateTime.parse(it) }
+    @OptIn(ExperimentalTime::class)
+    val startDateTime: Instant?
+        get() = startDatetimeISO?.let { Instant.parse(it) }
 
-    val day2StartDateTime: LocalDateTime?
-        get() = day2StartDatetimeISO?.let { LocalDateTime.parse(it) }
+    @OptIn(ExperimentalTime::class)
+    val day2StartDateTime: Instant?
+        get() = day2StartDatetimeISO?.let { Instant.parse(it) }
 }
