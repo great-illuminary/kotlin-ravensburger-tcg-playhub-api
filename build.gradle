@@ -28,12 +28,9 @@ allprojects {
 group = ext.groupId
 version = ext.version
 
-group = "eu.codlab"
-version = property("version")
-
 subprojects {
-    group = "eu.codlab"
-    version = property("version")
+    group = rootProject.ext.groupId
+    version = rootProject.ext.version
 
     task allDeps(type: DependencyReportTask) {}
 

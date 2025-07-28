@@ -2,7 +2,12 @@
  * Default project info
  * * * * * * * * * * * * * * * * */
 
-def defaultVersion = "0.0.1"
+
+Properties props = new Properties()
+file("${project.projectDir}/version.properties").withReader { props.load(it) }
+
+def defaultVersion = props.getProperty("version")
+def group = props.getProperty("group")
 
 def propSuffix = { prefix, suffixKeyName ->
     return rootProject.properties.containsKey(suffixKeyName)
@@ -22,7 +27,7 @@ ext {
 
     signingKeyId = prop("signing.keyId", null)
 
-    groupId = prop("GROUP_ID", "eu.codlab.lorcana.api")
+    groupId = group
     originalVersion = defaultVersion
     version = propSuffix(defaultVersion, "SUFFIX")
 
