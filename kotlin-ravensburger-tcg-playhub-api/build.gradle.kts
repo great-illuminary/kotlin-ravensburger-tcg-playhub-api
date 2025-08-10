@@ -44,6 +44,7 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
+                api(additionals.multiplatform.file.access)
                 api(kotlin("test"))
                 api(additionals.kotlinx.coroutines.test)
             }
