@@ -28,6 +28,10 @@ data class StoreFull(
      */
     val longitude: Double? = null,
     /**
+     * Acronym of the store's state if available.
+     */
+    val state: String? = null,
+    /**
      * Duplicated information from above two. Only available in the full list of stores
      */
     val coordinates: LatLng? = null,

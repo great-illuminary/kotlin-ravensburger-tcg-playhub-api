@@ -5,6 +5,7 @@ import eu.codlab.lorcana.rph.store.StoreFull
 import eu.codlab.lorcana.rph.utils.Coordinates
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -43,6 +44,14 @@ data class Event(
     val gameplayFormat: GameplayFormat,
     @SerialName("distance_in_miles")
     val distanceInMiles: Int? = null,
+    @SerialName("created_at")
+    val createdAt: String,
+    @SerialName("updated_at")
+    val updatedAt: String,
+    /**
+     * TODO : investigate this field
+     */
+    val history: Map<String, String>? = null,
     /**
      * Note : seems only available in the list of events() not the event specifically
      */
@@ -111,6 +120,10 @@ data class Event(
     val isTemplate: Boolean,
     @SerialName("tax_enabled")
     val taxEnabled: Boolean,
+    @SerialName("created_by")
+    val createdBy: Int? = null,
+    @SerialName("updated_by")
+    val updatedBY: Int? = null,
     @SerialName("polymorphic_ctype")
     val polymorphicCtype: Int,
     val game: Int,
@@ -123,7 +136,9 @@ data class Event(
     @SerialName("banner_image")
     val bannerImage: Int,
     @SerialName("phase_template_group")
-    val phaseTemplateGroupId: String
+    val phaseTemplateGroupId: String,
+    @SerialName("game_rules_enforcement_level")
+    val gameRulesEnforcementLevel: String? = null
 ) {
     @OptIn(ExperimentalTime::class)
     val startDateTime: Instant?

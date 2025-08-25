@@ -27,5 +27,7 @@ data class EventSettings(
     @SerialName("stripe_price_id")
     val stripePriceId: String?,
     @SerialName("maximum_number_of_players_in_match")
-    val maximumNumberOfPlayersInMatch: Int? = null
+    val maximumNumberOfPlayersInMatch: Int? = null,
+    @SerialName("decklists_on_spicerack")
+    val decklistsOnSpicerack: Boolean? = false,
 )
