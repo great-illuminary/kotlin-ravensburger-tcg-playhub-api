@@ -123,7 +123,7 @@ data class Event(
     @SerialName("created_by")
     val createdBy: Int? = null,
     @SerialName("updated_by")
-    val updatedBY: Int? = null,
+    val updatedBy: Int? = null,
     @SerialName("polymorphic_ctype")
     val polymorphicCtype: Int,
     val game: Int,
