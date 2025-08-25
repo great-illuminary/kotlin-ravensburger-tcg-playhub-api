@@ -5,7 +5,7 @@ import eu.codlab.lorcana.rph.store.StoreFull
 import eu.codlab.lorcana.rph.utils.Coordinates
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonElement
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -48,10 +48,7 @@ data class Event(
     val createdAt: String,
     @SerialName("updated_at")
     val updatedAt: String,
-    /**
-     * TODO : investigate this field
-     */
-    val history: Map<String, String>? = null,
+    val history: JsonElement? = null,
     /**
      * Note : seems only available in the list of events() not the event specifically
      */
